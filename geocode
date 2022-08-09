@@ -1,0 +1,6 @@
+import geopandas
+
+path_to_data = "Address_Points.geojson"
+gdf = geopandas.read_file(path_to_data)
+
+print(gdf.head())
