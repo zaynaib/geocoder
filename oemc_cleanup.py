@@ -9,18 +9,19 @@ import json, csv
 ### START CONFIGS ###
 input_file = 'data/oemc.csv'
 cook_geojson = 'Address_Points.geojson'
-output_file = 'basic_geocode_locations.csv'
+output_file = 'oemc_locations.csv'
+error_output_file = 'outlier_oemc_locations.csv'
 ### END CONFIGS ###
 
 
 # load input file
-oemc_headers = []
+oemc_columns = ['numerical', 'directional','street_name']
 oemc_rows = []
 
 with open(input_file,'r') as csvfile:
     csvreader = csv.reader(csvfile)
     
-    oemc_headers = next(csvreader)
+    next(csvreader)
 
     for row in csvreader:
         #print(row[5])
@@ -31,19 +32,15 @@ with open(input_file,'r') as csvfile:
         #split the row location into an array to get the length of the location
         row_location_split = row_location.split()
         if len(row_location_split) == 4:
-            #print(row_location)
-            #print(type(row_location_split[0]))
             row_location_split[0] = row_location_split[0].replace('X', '0')
             row_location_split[0] = row_location_split[0].replace('@', '')
             oemc_rows.append(row_location_split)
 
-#print(oemc_rows)
-#print(oemc_rows[1][5].split())
 
 with open(output_file, 'w') as csvfile:
     csvwriter = csv.writer(csvfile)
 
-    csvwriter.writerow(oemc_headers)
+    csvwriter.writerow(oemc_columns)
     
     #write the rows of data
     csvwriter.writerows(oemc_rows)
@@ -60,5 +57,3 @@ with open(output_file, 'w') as csvfile:
 # only do this once then save the processed file
 # ETL for county 
 
-#address_points = json.load(open('Address_Points.geojson'))
-#print(address_points[0])
