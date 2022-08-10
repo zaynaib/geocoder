@@ -2,14 +2,12 @@ import json, csv, re
 #import pandas as pd
 
 ### START CONFIGS ###
-input_file = 'data/oemc.csv'
 cook_geojson = 'Address_Points.geojson'
-output_file = 'basic_geocode_locations.csv'
+output_file = 'cook_locations.csv'
 ### END CONFIGS ###
 
-
+#load the data
 address_points = json.load(open('Address_Points.geojson'))
-#print(len(address_points['features']))
 
 '''
 
@@ -30,29 +28,18 @@ print(splitAdd[0])
 
 '''
 
-#re.sub(r'/\d+', '/{id}', '/andre/23/abobora/43435')
 
-#^\d{2}(\d{2})$
-
-
-#print(re.sub(r'^\d{2}(\d{2})$','00', splitAdd[0]))
-'''
-x = splitAdd[0].replace(splitAdd[0][2:], "00")
-
-
-
-print(splitAdd[0][2:])
-print(x)
-
-splitAdd[0] = splitAdd[0].replace(splitAdd[0][2:], "00")
-print(splitAdd)
-'''
 
 cleanAddress = []
+address_num = []
+address_direction =[]
+address_street = []
+address_abr = []
 zipcode = []
 lat = []
 long = []
 regAddress = []
+outliers = []
 
 
 headers = ['regAddress', 'cleanAddress', 'lat', 'long','zipcode']
@@ -60,17 +47,25 @@ headers = ['regAddress', 'cleanAddress', 'lat', 'long','zipcode']
 for values in address_points['features']:
     address = values['properties']['CMPADDABRV']
     try:
-        address = address.replace('@', ' ')
         address = address.split()
-        address[0] = address[0].replace(address[0][-2:], "00")
-        address_txt = ' '.join(address)
+        address_len = len(address)
+
+        if address_len == 4 :
+            address_num.append(address[0])
+            address_direction.append(address[1])
+            address_street.append(address[2])
+            address_abr.append(address[3])
+            cleanAddress.append(address)
+            zipcode.append(values['properties']['Post_Code'])
+            lat.append(values['properties']['Lat'])
+            long.append(values['properties']['Long'])
+            regAddress.append(values['properties']['CMPADDABRV'])
+        else:
+            outliers.append(address)
+        
         #print(address)
-        print(address_txt)
-        cleanAddress.append(address_txt)
-        zipcode.append(values['properties']['Post_Code'])
-        lat.append(values['properties']['Lat'])
-        long.append(values['properties']['Long'])
-        regAddress.append(values['properties']['CMPADDABRV'])
+        #print(outliers)
+
     except:
         print('something happened')
 
@@ -80,8 +75,13 @@ for values in address_points['features']:
 with open("test.csv", "w", newline='') as f:
     writer = csv.writer(f)
     for i in range(len(cleanAddress)):
-        content = cleanAddress[i], zipcode[i], lat[i],long[i], regAddress[i]
+        content = address_num[i],address_direction[i], address_street[i], address_abr[i],zipcode[i], lat[i],long[i], regAddress[i]
         writer.writerow(content)
+
+with open("cook_outliers.csv", "w", newline='') as f:
+    writer = csv.writer(f)
+    for i in range(len(outliers)):
+        writer.writerow(outliers)
 
         
     #first split the string

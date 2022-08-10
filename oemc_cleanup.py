@@ -10,13 +10,14 @@ import json, csv
 input_file = 'data/oemc.csv'
 cook_geojson = 'Address_Points.geojson'
 output_file = 'oemc_locations.csv'
-error_output_file = 'outlier_oemc_locations.csv'
+outlier_output_file = 'outlier_oemc_locations.csv'
 ### END CONFIGS ###
 
 
 # load input file
-oemc_columns = ['numerical', 'directional','street_name']
+oemc_columns = ['numerical', 'directional','street_name','abbvr']
 oemc_rows = []
+oemc_outlier_rows = []
 
 with open(input_file,'r') as csvfile:
     csvreader = csv.reader(csvfile)
@@ -31,10 +32,13 @@ with open(input_file,'r') as csvfile:
 
         #split the row location into an array to get the length of the location
         row_location_split = row_location.split()
+        
         if len(row_location_split) == 4:
-            row_location_split[0] = row_location_split[0].replace('X', '0')
             row_location_split[0] = row_location_split[0].replace('@', '')
+            row_location_split[0] = row_location_split[0].replace('X', '0')
             oemc_rows.append(row_location_split)
+        else:
+            oemc_outlier_rows.append(row_location_split)
 
 
 with open(output_file, 'w') as csvfile:
@@ -44,6 +48,13 @@ with open(output_file, 'w') as csvfile:
     
     #write the rows of data
     csvwriter.writerows(oemc_rows)
+
+
+with open(outlier_output_file, 'w') as outlier_csvfile:
+    csvwriter = csv.writer(outlier_csvfile)
+    
+    #write the rows of data
+    csvwriter.writerows(oemc_outlier_rows)
 
 
 
