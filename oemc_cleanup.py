@@ -9,45 +9,63 @@ import json, csv
 ### START CONFIGS ###
 input_file = 'data/oemc.csv'
 cook_geojson = 'Address_Points.geojson'
-output_file = 'oemc_locations.csv'
+output_file_name = 'oemc_locations.csv'
 outlier_output_file = 'outlier_oemc_locations.csv'
 ### END CONFIGS ###
 
 
 # load input file
-oemc_columns = ['numerical', 'directional','street_name','abbvr']
-oemc_rows = []
+oemc_columns = ['numerical', 'directional','street_name','suffix']
+
+# for cleaned up location data
+output_rows = []
+
+# for debugging
 oemc_outlier_rows = []
 
 with open(input_file,'r') as csvfile:
-    csvreader = csv.reader(csvfile)
-    
-    next(csvreader)
+    csvreader = csv.DictReader(csvfile)
 
     for row in csvreader:
-        #print(row[5])
-
         #grab the oemc street location
-        row_location = row[5]
+        row_location = row['Location']
+
+        location_clean = row_location.replace('@','')
 
         #split the row location into an array to get the length of the location
-        row_location_split = row_location.split()
+        location_split = location_clean.split()
+
+        # some location values are incomplete so nothing to do here
+        if len(location_split) < 3:
+            continue
+
+        # TODO: validate numerical evaluates to int
+        numerical = location_split[0].replace('X','0')
         
-        if len(row_location_split) == 4:
-            row_location_split[0] = row_location_split[0].replace('@', '')
-            row_location_split[0] = row_location_split[0].replace('X', '0')
-            oemc_rows.append(row_location_split)
-        else:
-            oemc_outlier_rows.append(row_location_split)
+        # TODO: validate directional == 1 length & in (NSEW)
+        directional = location_split[1]
+
+        # TODO: validate street name is in street name list
+        street_name = ' '.join(location_split[2:-1])
+
+        # TODO: validate suffix is in suffix list
+        suffix = location_split[-1]
+       
+        output_row = row
+        output_row['numerical'] = numerical
+        output_row['directional'] = directional
+        output_row['street_name'] = street_name
+        output_row['suffix'] = suffix
 
 
-with open(output_file, 'w') as csvfile:
-    csvwriter = csv.writer(csvfile)
+        output_rows.append(output_row)
 
-    csvwriter.writerow(oemc_columns)
-    
-    #write the rows of data
-    csvwriter.writerows(oemc_rows)
+# write out
+output_file = open(output_file_name,'w')
+output_csv = csv.DictWriter(output_file,output_row.keys())
+output_csv.writeheader()
+output_csv.writerows(output_rows)
+output_file.close()
 
 
 with open(outlier_output_file, 'w') as outlier_csvfile:
