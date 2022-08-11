@@ -41,6 +41,7 @@ long = []
 regAddress = []
 outliers = []
 
+#make chages
 
 headers = ['regAddress', 'cleanAddress', 'lat', 'long','zipcode']
 
