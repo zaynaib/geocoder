@@ -28,7 +28,17 @@ Scripts
     
     SUFFIX: AVE
 
+    **OUTPUT FILE** - oemc_locations.csv
+
 - geojson_tocsv.py
 
-Converts Address_Point.geojson into a csv file called **cook_locations.csv**. 
-This was needed for jupyter notebook to read in the data. 
+    Converts Address_Point.geojson into a csv file called **cook_locations.csv**. 
+    This was needed for jupyter notebook to read in the data. 
+
+
+    **OUTPUT FILE** - cook_locations.csv
+
+- geocoding.ipynb
+
+This is a notebook takes an address from *oemc.csv* and finds the zipcode of each address using *cook_locations.csv*.
+
