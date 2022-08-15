@@ -11,3 +11,24 @@ data folder
 - Address_Point.geojson
 
     Geolocations of every address in Cook County. Offical maintenance site of [Address Points](https://hub-cookcountyil.opendata.arcgis.com/datasets/5ec856ded93e4f85b3f6e1bc027a2472_0/about)
+
+
+Scripts
+
+- oemc_cleanup.py
+
+    This script cleans up and splits the address of the oemc call and splits them into four columns NUMERICAL, DIRECTIONAL, STREET_NAME, SUFFIX 
+    EX. 76XX S HALSTED ST becomes 
+    
+    NUMERICAL: 7600 
+    
+    DIRECTIONAL: S 
+    
+    STREET_NAME: HALSTED 
+    
+    SUFFIX: AVE
+
+- geojson_tocsv.py
+
+Converts Address_Point.geojson into a csv file called **cook_locations.csv**. 
+This was needed for jupyter notebook to read in the data. 
