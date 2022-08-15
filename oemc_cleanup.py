@@ -8,9 +8,8 @@ import json, csv
 
 ### START CONFIGS ###
 input_file = 'data/oemc.csv'
-cook_geojson = 'Address_Points.geojson'
+cook_geojson = 'data/Address_Points.geojson'
 output_file_name = 'oemc_locations.csv'
-outlier_output_file = 'outlier_oemc_locations.csv'
 ### END CONFIGS ###
 
 
@@ -20,8 +19,7 @@ oemc_columns = ['numerical', 'directional','street_name','suffix']
 # for cleaned up location data
 output_rows = []
 
-# for debugging
-oemc_outlier_rows = []
+
 
 with open(input_file,'r') as csvfile:
     csvreader = csv.DictReader(csvfile)
@@ -68,14 +66,8 @@ output_csv.writerows(output_rows)
 output_file.close()
 
 
-with open(outlier_output_file, 'w') as outlier_csvfile:
-    csvwriter = csv.writer(outlier_csvfile)
-    
-    #write the rows of data
-    csvwriter.writerows(oemc_outlier_rows)
 
-
-
+#Logic for code
 #split the location column
 #replace xx's with 0
 #replace @ wtih '' empty string
