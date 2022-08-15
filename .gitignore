@@ -2,3 +2,5 @@ Address_Points.geojson
 *.csv
 data
 database
+misc
+data/databas/sqbpro

@@ -42,3 +42,12 @@ Scripts
 
 This is a notebook takes an address from *oemc.csv* and finds the zipcode of each address using *cook_locations.csv*.
 
+OUTPUT FILES : geocoded_batches
+
+
+geocoded_batches
+
+These rows are oemc rows that are geocoded. Meaning that they have a set of zipcodes attached. There will be a set of 30 batches total.
+
+
+
