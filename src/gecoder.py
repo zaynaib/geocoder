@@ -1,8 +1,9 @@
+#%%
 import pandas as pd
 import numpy as np
 
 ##### Helper functions ######
-
+#%%
 #create function to split upt clean_street_name and then just grab the street name
 def splitUp(word):
     w = word.split(' ')
@@ -79,7 +80,7 @@ def extractElement3(columnList):
 
 
 ###### read in cook county address ######
-address_points = pd.read_csv('cook_locations.csv')
+address_points = pd.read_csv('../cook_locations.csv')
 
 #print(address_points.head())
 
@@ -102,7 +103,7 @@ cook_locations_clean = cook_locations[~cook_locations['Post_Code'].isnull()]
 
 
 
-oemc_locations = pd.read_csv('oemc_locations.csv')
+oemc_locations = pd.read_csv('../oemc_locations.csv')
 oemc_clean_locations = oemc_locations[~oemc_locations['numerical'].str.isupper()]
 
 
@@ -156,10 +157,53 @@ chunkDf = np.array_split(omec_complete,30)
 chunkDf[0]
 
 
+######  prepare for final output ######
+
+oemc_output = None
+oemc_output = pd.DataFrame(columns=['EventNumber', 'EntryDate', 'EventType', 'TypeDescription', 'FinalDisposition', 'Location', 'CPDUnitList', 'CFDUnitList', 'numerical', 'directional', 'street_name', 'suffix' , 'zipcodes','lats','longs','clean_street_name','zipcode_list'])
+test_chunk = chunkDf[0].head()
+
+
+###TEST THE FIRST 5 ROWS of OEMC DATA ######
+#list_results = test_chunk.apply(lambda x: geoCodeChunk(x["numerical"],x["directional"],x["clean_street_name"],database),axis=1)
+#print(list_results)
 
 
 
 
 
+df = None
 
+df_complete = None
 
+for i in range(1):
+    exec(f'df_results = chunkDf[{i}].apply(lambda x: geoCodeChunk(x["numerical"],x["directional"],x["clean_street_name"],database),axis=1)')
+    df = df_results.to_frame(name='raw_results')
+    codes = df['raw_results'].apply(extractElement1)
+    df['zipcodes'] = codes
+    
+    lats = df['raw_results'].apply(extractElement2)
+    df['lats'] = lats
+    
+    longs = df['raw_results'].apply(extractElement3)
+    df['longs'] = longs
+
+    ziplist = df['raw_results'].apply(extractElement)
+    df['zipcode_list'] = ziplist
+    
+    #df = df.drop('t', axis=1)
+    
+
+        #df_final = pd.DataFrame.from_records(df_results, columns=['zipcodes','lats','longs'])
+    df_complete = pd.concat([chunkDf[i], df], axis=1)
+        #df_complete['zipcode'] = df_complete['zipcodes'].apply(extractElement)
+        #df_complete['lat'] = df_complete['lats'].apply(extractElement)
+        #df_complete['long'] = df_complete['longs'].apply(extractElement)
+    oemc_output = pd.concat([oemc_output,df_complete])
+
+    print('Done')
+
+#%%
+print(oemc_output)
+
+print(len(oemc_output['zipcode_list'])>1)
