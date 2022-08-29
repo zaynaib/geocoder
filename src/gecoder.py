@@ -18,5 +18,32 @@ cook_locations_clean = cook_locations[~cook_locations['Post_Code'].isnull()]
 ###### read in oemc data ######
 
 oemc_locations = pd.read_csv('oemc_locations.csv')
-print(oemc_locations.head())
+oemc_clean_locations = oemc_locations[~oemc_locations['numerical'].str.isupper()]
+
+
+#get rid of weird outlier
+oemc_clean_locations = oemc_clean_locations[oemc_clean_locations['EventNumber'] != 2011910398 ]
+
+
+#print(oemc_locations.head())
+#print(oemc_locations.shape)
+#print(oemc_clean_locations.shape)
+
+### Clean numerical part of oemc numerical part
+
+#print(oemc_clean_locations.dtypes)
+
+oemc_clean_locations['numerical'] = oemc_clean_locations['numerical'].astype(str)
+oemc_clean_locations['numerical'] = oemc_clean_locations['numerical'].str.strip()
+oemc_clean_locations['numerical'] = oemc_clean_locations['numerical'].astype(int)
+
+#print(oemc_clean_locations.dtypes)
+
+
+### Clean up street names in oemc data
+
+oemc_clean_locations['clean_street_name'] = oemc_clean_locations['street_name']
+
+
+
 
