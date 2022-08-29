@@ -222,13 +222,19 @@ oemc_output[oemc_output['zipcode_list'].apply(toString)]
 
 # %%
 #https://stackoverflow.com/questions/47720421/select-row-using-the-length-of-list-in-pandas-cell
-def toString(ele):
-    for x in ele:
-        if x == None:
-            continue
-        return str(x).strip()
+def toString(elements):
+    return list(set([str(x) for x in elements]))
+    
 # %%
-print(oemc_output.loc[24]['zipcode_list'].map(toString))
+print(oemc_output['zipcode_list'].apply(toString))
 # %%
+oemc_output['zipcode_list'] = oemc_output['zipcode_list'].apply(toString)
+# %%
+[str(x).strip() for x in oemc_output.loc[24]['zipcode_list']]
+# %%
+oemc_output[oemc_output['zipcode_list'].map(len)>1]
+# %%
+#oemc_output.loc[24]['zipcode_list']
+
 
 # %%
