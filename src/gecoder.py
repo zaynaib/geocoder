@@ -1,5 +1,5 @@
 import pandas as pd
-
+import numpy as np
 
 ##### Helper functions ######
 
@@ -21,6 +21,62 @@ def fullDirections(direction):
         return direction
 
 
+def geoCodeChunk(numerical,direction,street_name,database_df):
+    
+    complete_conditional = database_df[(database_df['St_Name'] == street_name) 
+                                & (database_df['St_PreDir'] == direction)
+                                & (database_df['Add_Number'] < numerical + 100)
+                                & (database_df['Add_Number'] >= numerical)
+                                ]
+    
+    '''
+     Improve selection criteria from the result set
+    '''
+    
+    
+    list_zipcodes = list(set(complete_conditional['Post_Code']))
+    list_lat = list(set(complete_conditional['Lat']))
+    list_long = list(set(complete_conditional['Long']))
+    
+    
+    return [list_zipcodes, list_lat,list_long]
+
+
+
+def geoCodeToDf(chunkDfName,columnNamesList):
+    newDataframe = pd.DataFrame.from_records(chunkDfName, columns=[columnNamesList])
+    return newDataframe
+
+#this grabs the list of zipcodes
+def extractElement(columnList):
+    try:
+        return columnList[0]
+    except:
+        return None
+
+#this grabs the first item of list of zipcodes
+def extractElement1(columnList):
+    try:
+        return columnList[0][0]
+    except:
+        return None
+        
+#this grabs the first item of list of lats
+def extractElement2(columnList):
+    try:
+        return columnList[1][0]
+    except:
+        return None
+
+
+#this grabs the first item of list of longs
+def extractElement3(columnList):
+    try:
+        return columnList[2][0]
+    except:
+        return None
+
+
 
 ###### read in cook county address ######
 address_points = pd.read_csv('cook_locations.csv')
@@ -28,8 +84,14 @@ address_points = pd.read_csv('cook_locations.csv')
 #print(address_points.head())
 
 cook_columns = ['CMPADDABRV', 'Lat', 'Long', 'PLACENAME', 'Post_Code', 'OBJECTID','ADDRDELIV','Add_Number','St_PreDir', 'St_Name']
-
 cook_locations = address_points[cook_columns]
+
+#data for geocoder matches
+database = cook_locations[cook_locations['PLACENAME'] =='Chicago']
+
+
+
+
 #print(cook_locations.head)
 #print(cook_locations.shape)
 
@@ -88,6 +150,10 @@ omec_complete = pd.concat([omec_nonS,omec_s])
 #strip the any trailing white space
 omec_complete['directional'] = omec_complete['directional'].str.strip()
 omec_complete['directional']= omec_complete['directional'].apply(fullDirections)
+
+###### create data chunks ######
+chunkDf = np.array_split(omec_complete,30)
+chunkDf[0]
 
 
 
