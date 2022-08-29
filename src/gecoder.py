@@ -1,7 +1,7 @@
 #%%
 import pandas as pd
 import numpy as np
-
+import math
 ##### Helper functions ######
 #%%
 #create function to split upt clean_street_name and then just grab the street name
@@ -101,7 +101,7 @@ cook_locations_clean = cook_locations[~cook_locations['Post_Code'].isnull()]
 #print(cook_locations_clean.shape)
 
 
-
+#%%
 
 oemc_locations = pd.read_csv('../oemc_locations.csv')
 oemc_clean_locations = oemc_locations[~oemc_locations['numerical'].str.isupper()]
@@ -207,3 +207,28 @@ for i in range(1):
 print(oemc_output)
 
 print(len(oemc_output['zipcode_list'])>1)
+
+# %%
+oemc_output['zipcode_list']
+
+# %%
+oemc_output[oemc_output['zipcode_list'].map(len)>1]
+
+# %%
+oemc_output.dtypes
+
+# %%
+oemc_output[oemc_output['zipcode_list'].apply(toString)]
+
+# %%
+#https://stackoverflow.com/questions/47720421/select-row-using-the-length-of-list-in-pandas-cell
+def toString(ele):
+    for x in ele:
+        if x == None:
+            continue
+        return str(x).strip()
+# %%
+print(oemc_output.loc[24]['zipcode_list'].map(toString))
+# %%
+
+# %%
