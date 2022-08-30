@@ -77,6 +77,10 @@ def extractElement3(columnList):
     except:
         return None
 
+def toString(elements):
+    return list(set([str(x) for x in elements]))
+    
+
 
 
 ###### read in cook county address ######
@@ -170,13 +174,118 @@ test_chunk = chunkDf[0].head()
 
 
 
-
+#%%
 
 df = None
 
 df_complete = None
 
-for i in range(1):
+for i in range(6):
+    exec(f'df_results = chunkDf[{i}].apply(lambda x: geoCodeChunk(x["numerical"],x["directional"],x["clean_street_name"],database),axis=1)')
+    df = df_results.to_frame(name='raw_results')
+    codes = df['raw_results'].apply(extractElement1)
+    df['zipcodes'] = codes
+    
+    lats = df['raw_results'].apply(extractElement2)
+    df['lats'] = lats
+    
+    longs = df['raw_results'].apply(extractElement3)
+    df['longs'] = longs
+
+    ziplist = df['raw_results'].apply(extractElement)
+    df['zipcode_list'] = ziplist
+
+
+    
+    #df = df.drop('t', axis=1)
+    
+
+        #df_final = pd.DataFrame.from_records(df_results, columns=['zipcodes','lats','longs'])
+    df_complete = pd.concat([chunkDf[i], df], axis=1)
+
+
+        #df_complete['zipcode'] = df_complete['zipcodes'].apply(extractElement)
+        #df_complete['lat'] = df_complete['lats'].apply(extractElement)
+        #df_complete['long'] = df_complete['longs'].apply(extractElement)
+    oemc_output = pd.concat([oemc_output,df_complete])
+    #oemc_output[oemc_output['zipcode_list'].apply(toString)]
+
+    print('Done')
+#%%
+oemc_output.shape
+#%%
+oemc_output['zipcode_list'] = oemc_output['zipcode_list'].apply(toString)
+oemc_output.to_csv('oemc_output_data2.csv')
+
+#%%
+for i in range(6,12):
+    exec(f'df_results = chunkDf[{i}].apply(lambda x: geoCodeChunk(x["numerical"],x["directional"],x["clean_street_name"],database),axis=1)')
+    df = df_results.to_frame(name='raw_results')
+    codes = df['raw_results'].apply(extractElement1)
+    df['zipcodes'] = codes
+    
+    lats = df['raw_results'].apply(extractElement2)
+    df['lats'] = lats
+    
+    longs = df['raw_results'].apply(extractElement3)
+    df['longs'] = longs
+
+    ziplist = df['raw_results'].apply(extractElement)
+    df['zipcode_list'] = ziplist
+    
+    #df = df.drop('t', axis=1)
+    
+
+        #df_final = pd.DataFrame.from_records(df_results, columns=['zipcodes','lats','longs'])
+    df_complete = pd.concat([chunkDf[i], df], axis=1)
+        #df_complete['zipcode'] = df_complete['zipcodes'].apply(extractElement)
+        #df_complete['lat'] = df_complete['lats'].apply(extractElement)
+        #df_complete['long'] = df_complete['longs'].apply(extractElement)
+    oemc_output = pd.concat([oemc_output,df_complete])
+
+#%%
+oemc_output.shape
+#%%
+oemc_output['zipcode_list'] = oemc_output['zipcode_list'].apply(toString)
+oemc_output.to_csv('oemc_output_data2.csv')
+
+
+
+#%%
+
+for i in range(12,18):
+    exec(f'df_results = chunkDf[{i}].apply(lambda x: geoCodeChunk(x["numerical"],x["directional"],x["clean_street_name"],database),axis=1)')
+    df = df_results.to_frame(name='raw_results')
+    codes = df['raw_results'].apply(extractElement1)
+    df['zipcodes'] = codes
+    
+    lats = df['raw_results'].apply(extractElement2)
+    df['lats'] = lats
+    
+    longs = df['raw_results'].apply(extractElement3)
+    df['longs'] = longs
+
+    ziplist = df['raw_results'].apply(extractElement)
+    df['zipcode_list'] = ziplist
+    
+    #df = df.drop('t', axis=1)
+    
+
+        #df_final = pd.DataFrame.from_records(df_results, columns=['zipcodes','lats','longs'])
+    df_complete = pd.concat([chunkDf[i], df], axis=1)
+        #df_complete['zipcode'] = df_complete['zipcodes'].apply(extractElement)
+        #df_complete['lat'] = df_complete['lats'].apply(extractElement)
+        #df_complete['long'] = df_complete['longs'].apply(extractElement)
+    oemc_output = pd.concat([oemc_output,df_complete])
+
+#%%
+oemc_output.shape
+#%%
+oemc_output['zipcode_list'] = oemc_output['zipcode_list'].apply(toString)
+oemc_output.to_csv('oemc_output_data2.csv')
+
+#%%
+for i in range(18,24):
     exec(f'df_results = chunkDf[{i}].apply(lambda x: geoCodeChunk(x["numerical"],x["directional"],x["clean_street_name"],database),axis=1)')
     df = df_results.to_frame(name='raw_results')
     codes = df['raw_results'].apply(extractElement1)
@@ -202,14 +311,50 @@ for i in range(1):
     oemc_output = pd.concat([oemc_output,df_complete])
 
     print('Done')
+#%%
+oemc_output.shape
 
 #%%
-print(oemc_output)
+oemc_output['zipcode_list'] = oemc_output['zipcode_list'].apply(toString)
+oemc_output.to_csv('oemc_output_data2.csv')
+#%%
 
-print(len(oemc_output['zipcode_list'])>1)
+for i in range(24,30):
+    exec(f'df_results = chunkDf[{i}].apply(lambda x: geoCodeChunk(x["numerical"],x["directional"],x["clean_street_name"],database),axis=1)')
+    df = df_results.to_frame(name='raw_results')
+    codes = df['raw_results'].apply(extractElement1)
+    df['zipcodes'] = codes
+    
+    lats = df['raw_results'].apply(extractElement2)
+    df['lats'] = lats
+    
+    longs = df['raw_results'].apply(extractElement3)
+    df['longs'] = longs
+
+    ziplist = df['raw_results'].apply(extractElement)
+    df['zipcode_list'] = ziplist
+    
+    #df = df.drop('t', axis=1)
+    
+
+        #df_final = pd.DataFrame.from_records(df_results, columns=['zipcodes','lats','longs'])
+    df_complete = pd.concat([chunkDf[i], df], axis=1)
+        #df_complete['zipcode'] = df_complete['zipcodes'].apply(extractElement)
+        #df_complete['lat'] = df_complete['lats'].apply(extractElement)
+        #df_complete['long'] = df_complete['longs'].apply(extractElement)
+    oemc_output = pd.concat([oemc_output,df_complete])
+
+    print('Done')
+#%%
+oemc_output.shape
+#%%
+oemc_output['zipcode_list'] = oemc_output['zipcode_list'].apply(toString)
+oemc_output.to_csv('oemc_output_data2.csv')
+''' #%%
+#print(len(oemc_output['zipcode_list'])>1)
 
 # %%
-oemc_output['zipcode_list']
+#oemc_output['zipcode_list']
 
 # %%
 oemc_output[oemc_output['zipcode_list'].map(len)>1]
@@ -222,9 +367,7 @@ oemc_output[oemc_output['zipcode_list'].apply(toString)]
 
 # %%
 #https://stackoverflow.com/questions/47720421/select-row-using-the-length-of-list-in-pandas-cell
-def toString(elements):
-    return list(set([str(x) for x in elements]))
-    
+
 # %%
 print(oemc_output['zipcode_list'].apply(toString))
 # %%
@@ -238,3 +381,4 @@ oemc_output[oemc_output['zipcode_list'].map(len)>1]
 
 
 # %%
+'''
