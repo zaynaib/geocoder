@@ -350,6 +350,13 @@ oemc_output.shape
 #%%
 oemc_output['zipcode_list'] = oemc_output['zipcode_list'].apply(toString)
 oemc_output.to_csv('oemc_output_data2.csv')
+
+
+print(oemc_output.head())
+
+
+#%%
+
 ''' #%%
 #print(len(oemc_output['zipcode_list'])>1)
 
