@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import math
+import helpers
 ##### Helper functions ######
 #%%
 #create function to split up clean_street_name and then just grab the street name
@@ -9,19 +10,6 @@ def splitUp(word):
     w = word.split(' ')
     return w[0]
     
-def fullDirections(direction):
-    if direction == 'W':
-        return 'WEST'
-    if direction == 'E':
-        return 'EAST'
-    if direction == 'S':
-        return 'SOUTH'
-    if direction == 'N':
-        return 'NORTH'
-    else:
-        return direction
-
-
 def geoCodeChunk(numerical,direction,street_name,database_df):
     
     complete_conditional = database_df[(database_df['St_Name'] == street_name) 
@@ -154,7 +142,7 @@ omec_complete = pd.concat([omec_nonS,omec_s])
 
 #strip the any trailing white space
 omec_complete['directional'] = omec_complete['directional'].str.strip()
-omec_complete['directional']= omec_complete['directional'].apply(fullDirections)
+omec_complete['directional']= omec_complete['directional'].apply(helpers.fullDirections)
 
 ###### create data chunks ######
 chunkDf = np.array_split(omec_complete,30)

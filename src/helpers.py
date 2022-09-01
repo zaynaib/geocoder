@@ -1,4 +1,18 @@
 def fullDirections(direction):
+    ''' 
+
+    Takes is direction letter W,E,S or, N and coverts the abbervation to its full name
+    Else it will just return the original direction that was provided
+
+    Parameters:
+        direction : W, E, S, or N
+
+    Returns:
+        WEST,EAST, SOUTH, NORTH or original input
+    
+    '''
+
+    direction = direction.upper().strip()
     if direction == 'W':
         return 'WEST'
     if direction == 'E':
@@ -9,3 +23,68 @@ def fullDirections(direction):
         return 'NORTH'
     else:
         return direction
+
+#create function to split up clean_street_name and then just grab the street name
+def splitUp(word):
+    w = word.split(' ')
+    return w[0]
+
+
+def geoCodeChunk(numerical,direction,street_name,database_df):
+    
+    complete_conditional = database_df[(database_df['St_Name'] == street_name) 
+                                & (database_df['St_PreDir'] == direction)
+                                & (database_df['Add_Number'] < numerical + 100)
+                                & (database_df['Add_Number'] >= numerical)
+                                ]
+    
+    '''
+     Improve selection criteria from the result set
+    '''
+    
+    
+    list_zipcodes = list(set(complete_conditional['Post_Code']))
+    list_lat = list(set(complete_conditional['Lat']))
+    list_long = list(set(complete_conditional['Long']))
+    
+    
+    return [list_zipcodes, list_lat,list_long]
+
+
+
+def geoCodeToDf(chunkDfName,columnNamesList):
+    newDataframe = pd.DataFrame.from_records(chunkDfName, columns=[columnNamesList])
+    return newDataframe
+
+#this grabs the list of zipcodes
+def extractElement(columnList):
+    try:
+        return columnList[0]
+    except:
+        return None
+
+#this grabs the first item of list of zipcodes
+def extractElement1(columnList):
+    try:
+        return columnList[0][0]
+    except:
+        return None
+        
+#this grabs the first item of list of lats
+def extractElement2(columnList):
+    try:
+        return columnList[1][0]
+    except:
+        return None
+
+
+#this grabs the first item of list of longs
+def extractElement3(columnList):
+    try:
+        return columnList[2][0]
+    except:
+        return None
+
+def toString(elements):
+    return list(set([str(x) for x in elements]))
+    
