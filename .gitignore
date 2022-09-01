@@ -1,6 +1,5 @@
 input
 *.csv
 misc
-data/databas.sqbpro
-.ipynb_checkpoints/geocoding-checkpoint.ipynb
+.ipynb_checkpoints
 *-checkpoint.ipynb

@@ -4,7 +4,7 @@ import numpy as np
 import math
 ##### Helper functions ######
 #%%
-#create function to split upt clean_street_name and then just grab the street name
+#create function to split up clean_street_name and then just grab the street name
 def splitUp(word):
     w = word.split(' ')
     return w[0]
@@ -84,7 +84,7 @@ def toString(elements):
 
 
 ###### read in cook county address ######
-address_points = pd.read_csv('../cook_locations.csv')
+address_points = pd.read_csv('input/cook_locations.csv')
 
 #print(address_points.head())
 
@@ -107,7 +107,7 @@ cook_locations_clean = cook_locations[~cook_locations['Post_Code'].isnull()]
 
 #%%
 
-oemc_locations = pd.read_csv('../oemc_locations.csv')
+oemc_locations = pd.read_csv('input/oemc_locations.csv')
 oemc_clean_locations = oemc_locations[~oemc_locations['numerical'].str.isupper()]
 
 

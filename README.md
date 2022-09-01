@@ -51,3 +51,10 @@ These rows are oemc rows that are geocoded. Meaning that they have a set of zipc
 
 
 
+## Workflow
+
+1. Read cook county locations and oemc data files
+2. Clean the data
+3. Transform the data
+4. Extract whatever information that I need
+5. Generate file output
