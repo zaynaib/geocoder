@@ -183,6 +183,40 @@ df = None
 
 df_complete = None
 
+#%%
+
+def setup(rangeNumStart,rangeNumEnd):
+    for i in range(rangeNumStart,rangeNumEnd):
+        df_results = chunkDf[i].apply(lambda x: geoCodeChunk(x["numerical"],x["directional"],x["clean_street_name"],database),axis=1)
+        #exec(f'df_results = chunkDf[{i}].apply(lambda x: geoCodeChunk(x["numerical"],x["directional"],x["clean_street_name"],database),axis=1)')
+        df = df_results.to_frame(name='raw_results')
+        codes = df['raw_results'].apply(extractSpecificElement, args =(0,0))
+        df['zipcodes'] = codes
+    
+        lats = df['raw_results'].apply(extractSpecificElement,args =(1,0))
+        df['lats'] = lats
+    
+        longs = df['raw_results'].apply(extractSpecificElement,args = (2,0))
+        df['longs'] = longs
+
+        ziplist = df['raw_results'].apply(extractElement)
+        df['zipcode_list'] = ziplist
+    
+        df_complete = pd.concat([chunkDf[i], df], axis=1)
+        oemc_output2 = pd.concat([oemc_output,df_complete])
+
+        print('Done')
+    return oemc_output2
+
+test_setup = setup(0,1)
+test_setup2 = setup(1,2)
+
+print(test_setup)
+end_test = pd.concat(test_setup,test_setup2)
+print(len(end_test))
+    
+#%%
+
 for i in range(6):
     exec(f'df_results = chunkDf[{i}].apply(lambda x: geoCodeChunk(x["numerical"],x["directional"],x["clean_street_name"],database),axis=1)')
     df = df_results.to_frame(name='raw_results')
@@ -197,9 +231,6 @@ for i in range(6):
 
     ziplist = df['raw_results'].apply(extractElement)
     df['zipcode_list'] = ziplist
-
-
-    
     
     df_complete = pd.concat([chunkDf[i], df], axis=1)
     oemc_output = pd.concat([oemc_output,df_complete])
@@ -211,6 +242,7 @@ oemc_output.head()
 #%%
 oemc_output['zipcode_list'] = oemc_output['zipcode_list'].apply(toString)
 oemc_output.to_csv('oemc_output_data2.csv')
+
 
 #%%
 for i in range(6,12):
