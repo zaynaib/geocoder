@@ -1,3 +1,5 @@
+import pandas as pd
+
 def fullDirections(direction):
     ''' 
 
@@ -25,13 +27,32 @@ def fullDirections(direction):
         return direction
 
 #create function to split up clean_street_name and then just grab the street name
-def splitUp(word):
-    w = word.split(' ')
+def splitUp(street):
+    '''
+    This function just grabs the street name.
+   
+
+    Parameters: 
+            A string that contains a street name and suffix
+
+            Clark ST
+
+    Returns:
+            Street name
+
+            Clark
+    '''
+    w = street.split(' ')
     return w[0]
 
 
 def geoCodeChunk(numerical,direction,street_name,database_df):
+    '''
     
+        Parameters:
+
+        Returns:
+    '''
     complete_conditional = database_df[(database_df['St_Name'] == street_name) 
                                 & (database_df['St_PreDir'] == direction)
                                 & (database_df['Add_Number'] < numerical + 100)
@@ -57,6 +78,7 @@ def geoCodeToDf(chunkDfName,columnNamesList):
     return newDataframe
 
 #this grabs the list of zipcodes
+#extra the raw 
 def extractElement(columnList):
     try:
         return columnList[0]

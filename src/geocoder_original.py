@@ -1,12 +1,3 @@
-
-##TO DO:
-
-#refactor to class
-#refactor so it can be more usuable with other datasets
-#have the option for all of illinois
-#have the option for just chicago
-#
-
 #%%
 import pandas as pd
 import numpy as np
@@ -52,12 +43,6 @@ def extractElement(columnList):
     except:
         return None
 
-def extractSpecificElement(columnList,loc1,loc2):
-    try:
-        return columnList[loc1][loc2]
-    except:
-        return None
-
 #this grabs the first item of list of zipcodes
 def extractElement1(columnList):
     try:
@@ -87,7 +72,7 @@ def toString(elements):
 
 
 ###### read in cook county address ######
-address_points = pd.read_csv('../input/cook_locations.csv')
+address_points = pd.read_csv('input/cook_locations.csv')
 
 #print(address_points.head())
 
@@ -110,7 +95,7 @@ cook_locations_clean = cook_locations[~cook_locations['Post_Code'].isnull()]
 
 #%%
 
-oemc_locations = pd.read_csv('../input/oemc_locations.csv')
+oemc_locations = pd.read_csv('input/oemc_locations.csv')
 oemc_clean_locations = oemc_locations[~oemc_locations['numerical'].str.isupper()]
 
 
@@ -186,13 +171,13 @@ df_complete = None
 for i in range(6):
     exec(f'df_results = chunkDf[{i}].apply(lambda x: geoCodeChunk(x["numerical"],x["directional"],x["clean_street_name"],database),axis=1)')
     df = df_results.to_frame(name='raw_results')
-    codes = df['raw_results'].apply(extractSpecificElement, args =(0,0))
+    codes = df['raw_results'].apply(extractElement1)
     df['zipcodes'] = codes
     
-    lats = df['raw_results'].apply(extractSpecificElement,args =(1,0))
+    lats = df['raw_results'].apply(extractElement2)
     df['lats'] = lats
     
-    longs = df['raw_results'].apply(extractSpecificElement,args = (2,0))
+    longs = df['raw_results'].apply(extractElement3)
     df['longs'] = longs
 
     ziplist = df['raw_results'].apply(extractElement)
@@ -200,14 +185,22 @@ for i in range(6):
 
 
     
+    #df = df.drop('t', axis=1)
     
+
+        #df_final = pd.DataFrame.from_records(df_results, columns=['zipcodes','lats','longs'])
     df_complete = pd.concat([chunkDf[i], df], axis=1)
+
+
+        #df_complete['zipcode'] = df_complete['zipcodes'].apply(extractElement)
+        #df_complete['lat'] = df_complete['lats'].apply(extractElement)
+        #df_complete['long'] = df_complete['longs'].apply(extractElement)
     oemc_output = pd.concat([oemc_output,df_complete])
+    #oemc_output[oemc_output['zipcode_list'].apply(toString)]
 
     print('Done')
 #%%
 oemc_output.shape
-oemc_output.head()
 #%%
 oemc_output['zipcode_list'] = oemc_output['zipcode_list'].apply(toString)
 oemc_output.to_csv('oemc_output_data2.csv')
