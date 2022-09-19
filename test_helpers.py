@@ -55,3 +55,7 @@ def test_geoCodeChunk(chicago_location):
     #here
     pass
 
+###TEST THE FIRST 5 ROWS of OEMC DATA ######
+#list_results = test_chunk.apply(lambda x: geoCodeChunk(x["numerical"],x["directional"],x["clean_street_name"],database),axis=1)
+#print(list_results)
+
