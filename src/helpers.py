@@ -49,20 +49,28 @@ def splitUp(street):
 def geoCodeChunk(numerical,direction,street_name,database_df):
     '''
     
-        Parameters:
+        example : 7600  S HALSTED ST
+        Parameters: 
+        Numerical - (street number) 7600
+        Direction -( street direction) S
+        Name - (street name) HALSTED
 
         Returns:
+        [[60620],[41.75590425],[-87.64385433]]
+
+        TO DO:
+
+        Improve selection criteria from the result set
+        Make the result a dictionary instead of a nested list
+
+
     '''
+
     complete_conditional = database_df[(database_df['St_Name'] == street_name) 
                                 & (database_df['St_PreDir'] == direction)
                                 & (database_df['Add_Number'] < numerical + 100)
                                 & (database_df['Add_Number'] >= numerical)
-                                ]
-    
-    '''
-     Improve selection criteria from the result set
-    '''
-    
+                                ]   
     
     list_zipcodes = list(set(complete_conditional['Post_Code']))
     list_lat = list(set(complete_conditional['Lat']))
@@ -74,6 +82,13 @@ def geoCodeChunk(numerical,direction,street_name,database_df):
 
 
 def geoCodeToDf(chunkDfName,columnNamesList):
+    '''
+
+    Convert list data structure into a dataframe
+
+
+
+    '''
     newDataframe = pd.DataFrame.from_records(chunkDfName, columns=[columnNamesList])
     return newDataframe
 
@@ -104,6 +119,18 @@ def extractElement2(columnList):
 def extractElement3(columnList):
     try:
         return columnList[2][0]
+    except:
+        return None
+
+
+def extractSpecificElement(columnList,loc1,loc2):
+
+    '''
+    
+    '''
+
+    try:
+        return columnList[loc1][loc2]
     except:
         return None
 

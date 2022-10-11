@@ -1,7 +1,14 @@
 # Geocoder 
 
+## Purpose of this tool
+
+This tool takes in a spreadsheet of addresses that are located in the city of Chicago and returns geocodeded information such as lat/long and zip code.
+Source data set is from Cook County Central website, the dataset is called [Address Points](https://hub-cookcountyil.opendata.arcgis.com/datasets/5ec856ded93e4f85b3f6e1bc027a2472_0/about)
+
+
 Currently the geocoder is specific to 988 data which can be located in the data folder.
 
+## Folders/ Scripts/Datasets
 
 data folder
 - [oemc.csv](https://docs.google.com/spreadsheets/d/1N5od-Nan0WWpzQLg_7i-wGnzivGCTYXMWXUvFSnONkQ/edit#gid=1894319207)

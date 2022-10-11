@@ -15,10 +15,7 @@ import helpers
 
 ##### Helper functions ######
 #%%
-#create function to split up clean_street_name and then just grab the street name
-def splitUp(word):
-    w = word.split(' ')
-    return w[0]
+
     
 def geoCodeChunk(numerical,direction,street_name,database_df):
     
@@ -156,7 +153,8 @@ def setup(rangeNumStart,rangeNumEnd):
     return oemc_output2
 
 #%%
-result_setup = setup(0,1)
+#result_setup = setup(0,1)
+#test chuck
 
 #%%
 result_setup = setup(0,6)
