@@ -46,7 +46,7 @@ def splitUp(street):
     return w[0]
 
 
-def geoCodeChunk(numerical,direction,street_name,database_df):
+def geoCoder(numerical,direction,street_name,database_df):
     '''
     
         example : 7600  S HALSTED ST
