@@ -78,5 +78,5 @@ end_result.shape
 end_result.head()
 #%%
 end_result['zipcode_list'] = end_result['zipcode_list'].apply(toString)
-end_result.to_csv('oemc_output_data2.csv')
+end_result.to_csv('../output/oemc_output_data2.csv')
 

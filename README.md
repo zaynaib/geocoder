@@ -10,7 +10,7 @@ Currently the geocoder is specific to 988 data which can be located in the data 
 
 ## Folders/ Scripts/Datasets
 
-data folder
+input folder
 - [oemc.csv](https://docs.google.com/spreadsheets/d/1N5od-Nan0WWpzQLg_7i-wGnzivGCTYXMWXUvFSnONkQ/edit#gid=1894319207)
     
     Raw data of calls made to the Office ofe Emergency Management & Communications. These calls have been marked as releated to a mental health issue.
@@ -19,23 +19,46 @@ data folder
 
     Geolocations of every address in Cook County. Offical maintenance site of [Address Points](https://hub-cookcountyil.opendata.arcgis.com/datasets/5ec856ded93e4f85b3f6e1bc027a2472_0/about)
 
+- src
 
-Scripts
+    Contains scripts to geocoded oemc data. Refer to scripts section of readme for more information.
 
-- oemc_cleanup.py
+- notebook
 
-    This script cleans up and splits the address of the oemc call and splits them into four columns NUMERICAL, DIRECTIONAL, STREET_NAME, SUFFIX 
-    EX. 76XX S HALSTED ST becomes 
-    
-    NUMERICAL: 7600 
-    
-    DIRECTIONAL: S 
-    
-    STREET_NAME: HALSTED 
-    
-    SUFFIX: AVE
+    Contains jupyter notebooks of prototype geocoder scripts.
 
-    **OUTPUT FILE** - oemc_locations.csv
+- output
+
+    Contains geocoded oemc data created from main.py. 
+
+
+
+## Scripts
+
+- geocoder.py
+
+    contains a script that can be used with any dataset that needs to be geocoded. It needs 3 columns.
+    
+    example : 7600  S HALSTED ST
+
+    - Numerical - (street number) 7600
+    - Direction -( street direction) S
+    - Name - (street name) HALSTED
+
+
+- helpers.py
+
+    This script contains functions that extract, tranforms, and load oemc data
+
+- cleanup.py
+
+    This script is using the functions from helpers.py to transfrom oemc data in order for it to be ready to be geocoded.
+
+- main.py
+    
+    This script setup the cleaned oemc data to be geocoded. It returns a csv files of geocoded oemc data.
+
+    **OUTPUT FILE** - oemc_locations2.csv
 
 - geojson_tocsv.py
 
@@ -47,14 +70,14 @@ Scripts
 
 - geocoding.ipynb
 
-This is a notebook takes an address from *oemc.csv* and finds the zipcode of each address using *cook_locations.csv*.
+    This is a notebook takes an address from *oemc.csv* and finds the zipcode of each address using *cook_locations.csv*.
 
-OUTPUT FILES : geocoded_batches
+    OUTPUT FILES : geocoded_batches
 
 
-geocoded_batches
+- geocoded_batches_analysis
 
-These rows are oemc rows that are geocoded. Meaning that they have a set of zipcodes attached. There will be a set of 30 batches total.
+Exploratory data anaylsis of zipcodes that were geocoded from oemc dataset.
 
 
 

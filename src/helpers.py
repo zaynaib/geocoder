@@ -90,8 +90,7 @@ def geoCodeToDf(chunkDfName,columnNamesList):
     newDataframe = pd.DataFrame.from_records(chunkDfName, columns=[columnNamesList])
     return newDataframe
 
-#this grabs the list of zipcodes
-#extra the raw 
+
 def extractElement(columnList):
     '''
     Extracts the first data series from a nested list. In this case the zipcodes
