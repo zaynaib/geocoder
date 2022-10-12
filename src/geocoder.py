@@ -1,4 +1,3 @@
-
 ##TO DO:
 
 #refactor to class
