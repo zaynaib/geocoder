@@ -1,5 +1,10 @@
+ #%%
 import pandas as pd
-
+import numpy as np
+import math
+from helpers import *
+ 
+ #%%   
 ###### read in cook county address ######
 address_points = pd.read_csv('../input/cook_locations.csv')
 
@@ -17,10 +22,8 @@ cook_locations_clean = cook_locations[~cook_locations['Post_Code'].isnull()]
 
 
 #%%
-
 oemc_locations = pd.read_csv('../input/oemc_locations.csv')
 oemc_clean_locations = oemc_locations[~oemc_locations['numerical'].str.isupper()]
-
 
 #get rid of weird outlier
 oemc_clean_locations = oemc_clean_locations[oemc_clean_locations['EventNumber'] != 2011910398 ]
@@ -44,7 +47,7 @@ omec_s = oemc_clean_locations[oemc_clean_locations['street_name'].str.contains("
 
 #grab the beginning of the string until the forward slash /
 omec_s['clean_street_name'] = omec_s['street_name'].str.replace("(?:/).*",'',regex=True)
-omec_s['clean_street_name'] = omec_s['clean_street_name'].apply(helpers.splitUp)
+omec_s['clean_street_name'] = omec_s['clean_street_name'].apply(splitUp)
 omec_complete = pd.concat([omec_nonS,omec_s])
 
 
@@ -52,4 +55,18 @@ omec_complete = pd.concat([omec_nonS,omec_s])
 
 #strip the any trailing white space
 omec_complete['directional'] = omec_complete['directional'].str.strip()
-omec_complete['directional']= omec_complete['directional'].apply(helpers.fullDirections)
+omec_complete['directional']= omec_complete['directional'].apply(fullDirections)
+
+###### create data chunks ######
+chunkDf = np.array_split(omec_complete,30)
+chunkDf[0]
+
+
+######  prepare for final output ######
+
+oemc_output = None
+oemc_output = pd.DataFrame(columns=['EventNumber', 'EntryDate', 'EventType', 'TypeDescription', 'FinalDisposition', 'Location', 'CPDUnitList', 'CFDUnitList', 'numerical', 'directional', 'street_name', 'suffix' , 'zipcodes','lats','longs','clean_street_name','zipcode_list'])
+test_chunk = chunkDf[0].head()
+
+
+    
